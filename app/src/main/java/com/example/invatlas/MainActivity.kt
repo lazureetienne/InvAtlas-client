@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -22,6 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.invatlas.ui.theme.InvAtlasTheme
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.rememberCameraPositionState
 
 class MainActivity : ComponentActivity() {
 
@@ -35,32 +40,31 @@ class MainActivity : ComponentActivity() {
                 NavigationItem("Floradex", R.drawable.outline_yard_24, R.drawable.baseline_yard_24)
             )
             InvAtlasTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                Box(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize()
+                    when (selectedItem) {
+                        0 -> AtlasScreen()
+                        1 -> IvyScreen()
+                        2 -> FloradexScreen()
+                    }
+                    NavigationBar(
+                        modifier = Modifier.align(Alignment.BottomCenter)
                     ) {
-                        NavigationBar(
-                            modifier = Modifier.align(Alignment.BottomCenter)
-                        ) {
-                            items.forEachIndexed { index, item ->
-                                NavigationBarItem(
-                                    selected = selectedItem == index,
-                                    onClick = { selectedItem = index },
-                                    icon = {
-                                        val iconId =
-                                            if (selectedItem == index) item.selectedIconId else item.iconId
-                                        Icon(
-                                            painterResource(id = iconId),
-                                            contentDescription = item.title
-                                        )
-                                    },
-                                    label = { Text(item.title) }
-                                )
-                            }
+                        items.forEachIndexed { index, item ->
+                            NavigationBarItem(
+                                selected = selectedItem == index,
+                                onClick = { selectedItem = index },
+                                icon = {
+                                    val iconId =
+                                        if (selectedItem == index) item.selectedIconId else item.iconId
+                                    Icon(
+                                        painterResource(id = iconId),
+                                        contentDescription = item.title
+                                    )
+                                },
+                                label = { Text(item.title) }
+                            )
                         }
                     }
                 }
@@ -74,9 +78,34 @@ class MainActivity : ComponentActivity() {
         @DrawableRes val selectedIconId: Int
     )
 
+
+    @Composable
+    fun AtlasScreen() {
+        val singapore = LatLng(1.35, 103.87)
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(singapore, 10f)
+        }
+        GoogleMap(
+            modifier = Modifier
+                .fillMaxSize(),
+            cameraPositionState = cameraPositionState
+        ) {
+            // TODO
+        }
+    }
+
+    @Composable
+    fun IvyScreen() {
+        Text(text = "Ivy")
+    }
+
+    @Composable
+    fun FloradexScreen() {
+        Text(text = "Floradex")
+    }
     @Preview(showBackground = true)
     @Composable
-    fun GreetingPreview() {
+    fun Preview() {
         // TODO
     }
 }

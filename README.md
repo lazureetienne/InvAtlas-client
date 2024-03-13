@@ -1,1 +1,3 @@
-This README.md is a placeholder.
+- This app is dependant on the Secrets Gradle plugin for Android.
+- Add secrets.properties file containing MAPS_API_KEY='[your Google Maps Platform API Key]'
+- Add local.defaults.property file containing the following code: MAPS_API_KEY=DEFAULT_API_KEY
