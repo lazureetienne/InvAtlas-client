@@ -135,12 +135,12 @@ class MainActivity : ComponentActivity() {
             position = CameraPosition.fromLatLngZoom(singapore, 10f)
         }
         LevelBar()
-//        GoogleMap(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(bottom = 70.dp, top = 40.dp),
-//            cameraPositionState = cameraPositionState
-//        )
+        GoogleMap(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 70.dp, top = 40.dp),
+            cameraPositionState = cameraPositionState
+        )
         FloatingActionButton(
             onClick = { /*TODO: open camera*/ },
             modifier = Modifier.padding(top = 50.dp, start = 10.dp)
@@ -275,7 +275,7 @@ class MainActivity : ComponentActivity() {
             LazyColumn(modifier = Modifier.padding(top = 160.dp, bottom = 65.dp)) {
                 items(10) {
                     ChatBubble(Message("Hello, world from user!", "testUser"))
-                    ChatBubble(Message("Hello, world from ivy!", "ivy"))
+                    ChatBubble(Message("Hello, world from Ivy!", "Ivy"))
                 }
             }
             Row(
