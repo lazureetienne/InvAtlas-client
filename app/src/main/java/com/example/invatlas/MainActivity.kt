@@ -130,7 +130,7 @@ class MainActivity : ComponentActivity() {
         return User(
             "testAuth",
             "testUser",
-            5
+            3
         )
     }
 
