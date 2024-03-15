@@ -1,9 +1,12 @@
 package com.example.invatlas
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,17 +31,35 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.invatlas.ui.theme.InvAtlasTheme
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.rememberCameraPositionState
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.invatlas.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
+    private val INITIAL_PERMS = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.CAMERA
+    )
+
+    private val INITIAL_REQUEST = 1337
+
+    private fun notHasPermissions(): Boolean {
+        return INITIAL_PERMS.any {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(this, INITIAL_PERMS, INITIAL_REQUEST)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // TODO: Fetch user from server.
+        if (notHasPermissions()) {
+            requestPermissions() // TODO: handle permissions BEFORE showing the map.
+        }
         setContent {
             var selectedItem by remember { mutableIntStateOf(0) }
             val items = listOf(
@@ -46,7 +67,8 @@ class MainActivity : ComponentActivity() {
                 NavigationItem("Ivy", R.drawable.outline_forum_24, R.drawable.baseline_forum_24),
                 NavigationItem("Floradex", R.drawable.outline_yard_24, R.drawable.baseline_yard_24)
             )
-            InvAtlasTheme {
+            AppTheme {
+                LevelBar()
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
@@ -114,11 +136,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun AtlasScreen() {
-        val singapore = LatLng(1.35, 103.87)
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(singapore, 10f)
-        }
+    private fun LevelBar() {
         Box(
             modifier = Modifier
                 .height(40.dp)
@@ -132,13 +150,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.padding(end = 15.dp),
                     text = "Niveau ${getUserLevel(currentUser)}"
                 )
+                val progress by animateFloatAsState(
+                    targetValue = currentUser.xp.toFloat() / xpCap(getUserLevel(currentUser)),
+                    label = ""
+                )
                 LinearProgressIndicator(
-                    progress = currentUser.xp.toFloat() / xpCap(getUserLevel(currentUser)),
-                    color = MaterialTheme.colorScheme.primary,
+                    progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .height(20.dp)
-                        .clip(RoundedCornerShape(10.dp))
+                        .clip(RoundedCornerShape(10.dp)),
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
                     modifier = Modifier.padding(start = 15.dp),
@@ -146,24 +168,6 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-        GoogleMap(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 70.dp, top = 40.dp),
-            cameraPositionState = cameraPositionState
-        ) {
-            // TODO
-        }
-    }
-
-    @Composable
-    fun IvyScreen() {
-        Text(text = "Ivy")
-    }
-
-    @Composable
-    fun FloradexScreen() {
-        Text(text = "Floradex")
     }
 
     @Preview(showBackground = true)
