@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0-Beta4"
 }
 
 secrets {
@@ -68,6 +69,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation("com.google.maps.android:maps-compose:4.3.3")
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.material3.android)
     implementation(libs.play.services.location)
     testImplementation(libs.junit)
