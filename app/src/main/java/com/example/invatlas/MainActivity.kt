@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -149,8 +150,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.padding(end = 15.dp),
                     text = "Niveau ${getUserLevel(currentUser)}"
                 )
+                val progress by animateFloatAsState(
+                    targetValue = currentUser.xp.toFloat() / xpCap(getUserLevel(currentUser)),
+                    label = ""
+                )
                 LinearProgressIndicator(
-                    progress = { currentUser.xp.toFloat() / xpCap(getUserLevel(currentUser)) },
+                    progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .height(20.dp)
