@@ -12,7 +12,7 @@ import java.net.URL
 
 class ServerService {
     suspend fun listenToServer(): Message? {
-        val url = URL("http://localhost:8080/") // TODO: change to actual server
+        val url = URL("http://10.0.2.2:5000/") // TODO: change to actual server
 
         return withContext(Dispatchers.IO) {
             val connection = url.openConnection() as HttpURLConnection

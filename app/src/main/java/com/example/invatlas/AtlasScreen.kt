@@ -65,7 +65,7 @@ fun AtlasScreen() {
         showMap = true
     }
 
-    if(showMap) {
+    if (showMap) {
         val cameraPositionState = rememberCameraPositionState {
             position = if (hasLocationPermission.value) {
                 CameraPosition.Builder().target(currentUserPosition).zoom(16f).build()
