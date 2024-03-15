@@ -163,7 +163,7 @@ class MainActivity : ComponentActivity() {
                     label = ""
                 )
                 LinearProgressIndicator(
-                    progress = {progress},
+                    progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .height(20.dp)

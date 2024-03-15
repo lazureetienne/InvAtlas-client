@@ -40,7 +40,8 @@ fun IvyScreen() {
 
     val onTextSubmit: (String) -> Unit = { submittedText ->
         // TODO: Send to server
-        messages = messages + Message(submittedText, "testUser") // TODO: fetch user from auth service
+        messages =
+            messages + Message(submittedText, "testUser") // TODO: fetch user from auth service
         // TODO: Get response from server (async)
 //        listenToServer(user) { response ->
 //            messages = messages + Message(response, "Ivy")
@@ -131,7 +132,7 @@ fun ChatBubble(message: Message) {
     ) {
         Text(
             modifier = Modifier
-                .align(if(message.isFromUser) Alignment.End else Alignment.Start)
+                .align(if (message.isFromUser) Alignment.End else Alignment.Start)
                 .padding(horizontal = 15.dp),
             text = message.author,
             style = MaterialTheme.typography.bodySmall
