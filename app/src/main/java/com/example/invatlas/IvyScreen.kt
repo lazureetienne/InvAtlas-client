@@ -35,11 +35,16 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun IvyScreen() {
     var text by remember { mutableStateOf("") }
+    var messages by remember { mutableStateOf(listOf<Message>()) }
+    val user = User("testUser", "testUser", 0) // TODO: fetch user from auth service
 
-    // Function to handle text submission
     val onTextSubmit: (String) -> Unit = { submittedText ->
-        // TODO: Handle the submitted text
-        println("Submitted text: $submittedText")
+        // TODO: Send to server
+        messages = messages + Message(submittedText, "testUser") // TODO: fetch user from auth service
+        // TODO: Get response from server (async)
+//        listenToServer(user) { response ->
+//            messages = messages + Message(response, "Ivy")
+//        }
         text = "" // Clear the text
     }
     Box(
@@ -82,9 +87,8 @@ fun IvyScreen() {
 
         }
         LazyColumn(modifier = Modifier.padding(top = 160.dp, bottom = 65.dp)) {
-            items(10) {
-                ChatBubble(Message("Hello, world from user!", "testUser"))
-                ChatBubble(Message("Hello, world from Ivy!", "Ivy"))
+            items(messages.size) {
+                ChatBubble(messages[it])
             }
         }
         Row(
@@ -126,16 +130,16 @@ fun ChatBubble(message: Message) {
         horizontalAlignment = if (message.isFromUser) Alignment.End else Alignment.Start,
     ) {
         Text(
-            modifier = if (message.isFromUser) Modifier.padding(end = 135.dp) else Modifier.padding(
-                start = 160.dp
-            ),
+            modifier = Modifier
+                .align(if(message.isFromUser) Alignment.End else Alignment.Start)
+                .padding(horizontal = 15.dp),
             text = message.author,
             style = MaterialTheme.typography.bodySmall
         )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp),
+                .padding(horizontal = 10.dp),
             horizontalArrangement = if (message.isFromUser) Arrangement.End else Arrangement.Start
         ) {
             BoxWithConstraints {
