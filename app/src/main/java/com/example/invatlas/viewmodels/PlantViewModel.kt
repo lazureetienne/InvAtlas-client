@@ -12,18 +12,18 @@ import com.example.invatlas.RetrofitClient
 import kotlinx.coroutines.launch
 
 class PlantViewModel : ViewModel() {
-    private val _plantList = mutableStateListOf<Plant>()
+    private var _plantList = mutableStateListOf<Plant>()
     var errorMessage: String by mutableStateOf("")
     val plantList: List<Plant>
         get() = _plantList
 
-    fun getTodoList() {
+    fun getAllPlants() {
         viewModelScope.launch {
             try {
                 val retrofit = RetrofitClient.getClient()
                 val userApi = retrofit.create(PlantAPI::class.java)
                 val plantResponse = userApi.getAllPlants().execute()
-                _plantList = plantResponse.body().orEmpty()
+                _plantList.addAll(plantResponse.body().orEmpty())
 
             } catch (e: Exception) {
                 errorMessage = e.message.toString()

@@ -83,5 +83,6 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-core:2.13.0")
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.13.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
 }

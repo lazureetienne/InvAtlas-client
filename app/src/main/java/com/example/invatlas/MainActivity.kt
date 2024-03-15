@@ -3,6 +3,8 @@ package com.example.invatlas
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
@@ -34,6 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.invatlas.ui.theme.AppTheme
+import com.example.invatlas.viewmodels.PlantViewModel
+
 
 class MainActivity : ComponentActivity() {
     private val INITIAL_PERMS = arrayOf(
@@ -53,9 +57,13 @@ class MainActivity : ComponentActivity() {
         ActivityCompat.requestPermissions(this, INITIAL_PERMS, INITIAL_REQUEST)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val policy = ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+
+        val vm = PlantViewModel()
         // TODO: Fetch user from server.
         if (notHasPermissions()) {
             requestPermissions() // TODO: handle permissions BEFORE showing the map.
@@ -75,7 +83,7 @@ class MainActivity : ComponentActivity() {
                     when (selectedItem) {
                         0 -> AtlasScreen()
                         1 -> IvyScreen()
-                        2 -> FloradexScreen()
+                        2 -> FloradexScreen(vm)
                     }
                     NavigationBar(
                         modifier = Modifier.align(Alignment.BottomCenter)
@@ -155,7 +163,7 @@ class MainActivity : ComponentActivity() {
                     label = ""
                 )
                 LinearProgressIndicator(
-                    progress = { progress },
+                    progress = {progress},
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .height(20.dp)
