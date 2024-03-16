@@ -10,6 +10,9 @@ import androidx.activity.result.launch
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -21,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -46,6 +50,9 @@ fun AtlasScreen(vm: PlantViewModel) {
     val context = LocalContext.current
     val defaultLocation = LatLng(46.5458, -72.7492) // Shawinigan, QC
     var currentUserPosition by remember { mutableStateOf(defaultLocation) }
+    var showPopup by remember { mutableStateOf(false) }
+    var showMap by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit, block = {
         vm.getUserPlants()
     })
@@ -59,7 +66,8 @@ fun AtlasScreen(vm: PlantViewModel) {
             var base = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
             if (base != null) {
                 vm.identifyPlant(currentUserPosition.latitude, currentUserPosition.longitude, base)
-
+                showPopup = true
+                showMap = false
             } else {
                 Toast.makeText(context, "Impossible d'enregistrer l'image", Toast.LENGTH_SHORT).show()
             }
@@ -67,18 +75,37 @@ fun AtlasScreen(vm: PlantViewModel) {
         }
     )
 
+    when {
+        showPopup -> {
+            if (vm.userPlant == null) {
+                UnknownPlantPopup(
+                    onDismissRequest = { showPopup = false },
+                    onConfirmation = {
+                        showPopup = false
+                    },
+                )
+            } else {
+                CongratulationPopup(
+                    onDismissRequest = { showPopup = false },
+                    onConfirmation = {
+                        showPopup = false
+                    },
+                    userPlant = vm.userPlant!!
+                )
+            }
+        }
+    }
+
+
     val hasLocationPermission = remember {
         mutableStateOf(
             checkForPermission(context)
         )
     }
-    var showMap by remember { mutableStateOf(false) }
 
     val properties by remember {
         mutableStateOf(MapProperties(mapType = MapType.HYBRID, isMyLocationEnabled = true))
     }
-
-
 
     getCurrentLocation(context) {
         currentUserPosition = it
@@ -96,7 +123,8 @@ fun AtlasScreen(vm: PlantViewModel) {
         GoogleMap(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 30.dp),
+                .padding(5.dp)
+                .clip(RoundedCornerShape(10.dp)),
             properties = properties,
             cameraPositionState = cameraPositionState
         ) {
@@ -126,7 +154,7 @@ fun AtlasScreen(vm: PlantViewModel) {
 
     FloatingActionButton(
         onClick = { cameraLauncher.launch() },
-        modifier = Modifier.padding(top = 50.dp, start = 10.dp)
+        modifier = Modifier.padding(top = 10.dp, start = 10.dp)
     ) {
         Icon(
             painter = painterResource(R.drawable.baseline_photo_camera_24),

@@ -1,14 +1,12 @@
 package com.example.invatlas.models
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class UserPlant(
-    var id: Int,
-    var user: Int,
-    var plant: Int,
-    var img: String,
-    var longitude: Double,
-    var latitude: Double,
-) {
-    override fun toString(): String {
-        return "Plante test" // TODO: Replace with actual plant names based on id
-    }
-}
+    @JsonProperty("id") val id: Int,
+    @JsonProperty("user") val user: String,
+    @JsonProperty("plant") val plant: String,
+    @JsonProperty("img_path") val img: String,
+    @JsonProperty("long") val longitude: Double,
+    @JsonProperty("lat") val latitude: Double,
+)

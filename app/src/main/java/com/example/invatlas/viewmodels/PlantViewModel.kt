@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.invatlas.PlantAPI
 import com.example.invatlas.RetrofitClient
+import com.example.invatlas.models.IdentifyRequestBody
 import com.example.invatlas.models.Plant
 import com.example.invatlas.models.User
 import com.example.invatlas.models.UserPlant
@@ -24,6 +25,7 @@ class PlantViewModel : ViewModel() {
     private var _userPlant: UserPlant? = null
     private var _userPlants = mutableStateListOf<UserPlant>()
     private var _user: User? = null
+    private var _randomPlant: Plant? = null
 
     var errorMessage: String by mutableStateOf("")
     val plantList: List<Plant>
@@ -38,12 +40,16 @@ class PlantViewModel : ViewModel() {
     var sessionUser: User? = null
         get() = _user
 
+    var randomPlant: Plant? = null
+        get() = _randomPlant
+
     fun getAllPlants() {
         viewModelScope.launch {
             try {
                 val retrofit = RetrofitClient.getClient()
                 val userApi = retrofit.create(PlantAPI::class.java)
                 val plantResponse = userApi.getAllPlants().execute()
+                _plantList.clear()
                 _plantList.addAll(plantResponse.body().orEmpty())
 
             } catch (e: Exception) {
@@ -61,6 +67,7 @@ class PlantViewModel : ViewModel() {
                 val retrofit = RetrofitClient.getClient()
                 val userApi = retrofit.create(PlantAPI::class.java)
                 val plantResponse = userApi.getUserPlants(sessionUser?.name!!).execute()
+                _userPlants.clear()
                 _userPlants.addAll(plantResponse.body().orEmpty())
 
             } catch (e: Exception) {
@@ -91,8 +98,22 @@ class PlantViewModel : ViewModel() {
             try {
                 val retrofit = RetrofitClient.getClient()
                 val userApi = retrofit.create(PlantAPI::class.java)
-                val plantResponse = userApi.identify(sessionUser!!.name, lat, long, file).execute()
-                userPlant = plantResponse.body()
+                val plantResponse = userApi.identify(IdentifyRequestBody(sessionUser!!.name, lat, long, file)).execute()
+                _userPlant = plantResponse.body()
+
+            } catch (e: Exception) {
+                errorMessage = e.message.toString()
+            }
+        }
+    }
+
+    fun getRandomPlant() {
+        viewModelScope.launch {
+            try {
+                val retrofit = RetrofitClient.getClient()
+                val userApi = retrofit.create(PlantAPI::class.java)
+                val plantResponse = userApi.randomPlant().execute()
+                _randomPlant = plantResponse.body()
 
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
