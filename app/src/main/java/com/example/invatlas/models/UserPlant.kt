@@ -1,4 +1,4 @@
-package com.example.invatlas
+package com.example.invatlas.models
 
 data class UserPlant(
     var id: Int,

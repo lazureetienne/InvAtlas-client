@@ -1,4 +1,4 @@
-package com.example.invatlas
+package com.example.invatlas.views
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.aspectRatio

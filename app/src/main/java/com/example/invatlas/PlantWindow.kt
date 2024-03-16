@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,23 +14,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.invatlas.models.UserPlant
 
 @Composable
-fun PlantWindow(plant: UserPlant, onClose: () -> Unit) {
+fun PlantWindow(plant: UserPlant) {
     Card(modifier = Modifier.fillMaxSize(0.6f)) {
-        FloatingActionButton(
-            onClick = onClose,
-            modifier = Modifier
-                .align(Alignment.End)
-                .size(24.dp),
-            containerColor = MaterialTheme.colorScheme.secondary
-        ) {
-            Icon(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                painter = painterResource(R.drawable.baseline_close_24),
-                contentDescription = "Close"
-            )
-        }
+//        FloatingActionButton(
+//            onClick = onClose,
+//            modifier = Modifier
+//                .align(Alignment.End)
+//                .size(24.dp),
+//            containerColor = MaterialTheme.colorScheme.secondary
+//        ) {
+//            Icon(
+//                modifier = Modifier.align(Alignment.CenterHorizontally),
+//                painter = painterResource(R.drawable.baseline_close_24),
+//                contentDescription = "Close"
+//            )
+//        }
         Text(
             text = plant.plant.toString(),
             modifier = Modifier.align(Alignment.CenterHorizontally)

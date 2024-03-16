@@ -1,4 +1,4 @@
-package com.example.invatlas
+package com.example.invatlas.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,12 +31,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.invatlas.Message
+import com.example.invatlas.models.User
 
 @Composable
 fun IvyScreen() {
     var text by remember { mutableStateOf("") }
     var messages by remember { mutableStateOf(listOf<Message>()) }
-    val user = User("testUser", "testUser", 0) // TODO: fetch user from auth service
 
     val onTextSubmit: (String) -> Unit = { submittedText ->
         // TODO: Send to server

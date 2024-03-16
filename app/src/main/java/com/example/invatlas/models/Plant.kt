@@ -1,4 +1,4 @@
-package com.example.invatlas;
+package com.example.invatlas.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

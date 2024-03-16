@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.location.Location
+import android.os.Environment
 import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.core.app.ActivityCompat
@@ -15,6 +16,9 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 // This file is loosely inspired from https://github.com/YourSohail/Jetpack-Compose-GoogleMaps
@@ -59,4 +63,27 @@ fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorResId: Int):
     val canvas = Canvas(bitmap)
     vectorDrawable.draw(canvas)
     return BitmapDescriptorFactory.fromBitmap(bitmap)
+}
+
+fun saveBitmap(bitmap: Bitmap, fileName: String): File? {
+    val root = Environment.getExternalStorageDirectory().absolutePath + File.separator + "YourDirectory"
+    val directory = File(root)
+
+    if (!directory.exists()) {
+        directory.mkdirs()
+    }
+
+    val file = File(directory, fileName)
+    var outputStream: FileOutputStream? = null
+
+    try {
+        outputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        return file
+    } catch (e: IOException) {
+        e.printStackTrace()
+        return null
+    } finally {
+        outputStream?.close()
+    }
 }

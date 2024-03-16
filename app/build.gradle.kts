@@ -61,6 +61,8 @@ android {
 }
 
 dependencies {
+    val nav_version = "2.7.7"
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -86,5 +88,15 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.13.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation ("androidx.compose.material3:material3-window-size-class:1.2.1")
+    implementation("androidx.compose.material:material:1.6.3")
+
+
+
+
 
 }
