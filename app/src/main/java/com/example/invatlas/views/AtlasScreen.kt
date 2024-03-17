@@ -28,8 +28,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.invatlas.PlantWindow
 import com.example.invatlas.R
+import com.example.invatlas.navigation.InvAtlasDestinations
 import com.example.invatlas.utils.checkForPermission
 import com.example.invatlas.utils.getCurrentLocation
 import com.example.invatlas.utils.saveBitmap
@@ -46,7 +48,7 @@ import java.io.ByteArrayOutputStream
 
 
 @Composable
-fun AtlasScreen(vm: PlantViewModel) {
+fun AtlasScreen(vm: PlantViewModel, nav: NavHostController) {
     val context = LocalContext.current
     val defaultLocation = LatLng(46.5458, -72.7492) // Shawinigan, QC
     var currentUserPosition by remember { mutableStateOf(defaultLocation) }
@@ -87,8 +89,9 @@ fun AtlasScreen(vm: PlantViewModel) {
             } else {
                 CongratulationPopup(
                     onDismissRequest = { showPopup = false },
-                    onConfirmation = {
+                    onChat = {
                         showPopup = false
+                        nav.navigate("chat/${vm.userPlant!!.code}/${vm.userPlant!!.plant}")
                     },
                     userPlant = vm.userPlant!!
                 )

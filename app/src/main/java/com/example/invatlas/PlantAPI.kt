@@ -1,5 +1,6 @@
 package com.example.invatlas
 
+import com.example.invatlas.models.AskRequestBody
 import com.example.invatlas.models.IdentifyRequestBody
 import com.example.invatlas.models.Plant
 import com.example.invatlas.models.User
@@ -30,4 +31,8 @@ interface PlantAPI {
     @Headers("Content-Type: application/json")
     @POST("identify")
     fun identify(@Body body: IdentifyRequestBody): Call<UserPlant>
+
+    @Headers("Content-Type: application/json")
+    @POST("ask")
+    fun ask(@Body body: AskRequestBody): Call<String>
 }

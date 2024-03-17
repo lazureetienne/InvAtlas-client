@@ -26,12 +26,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.invatlas.viewmodels.PlantViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FloradexScreen(vm: PlantViewModel) {
+fun FloradexScreen(vm: PlantViewModel, nav: NavController) {
     LaunchedEffect(Unit, block = {
         vm.getAllPlants()
         vm.getUserPlants()
@@ -50,7 +51,7 @@ fun FloradexScreen(vm: PlantViewModel) {
         )
         if (vm.userPlants.isEmpty()) {
             Text(
-                text = "Touch grass",
+                text = "Temps d'aller explorer",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 12.dp),
@@ -70,7 +71,10 @@ fun FloradexScreen(vm: PlantViewModel) {
                         ),
                         modifier = Modifier
                             .size(width = 240.dp, height = 128.dp)
-                            .padding(5.dp)
+                            .padding(5.dp),
+                        onClick = {
+                            nav.navigate("chat/${vm.userPlants[plant].code}/${vm.userPlants[plant].plant}")
+                        }
                     ) {
                         AsyncImage(
                             model = "http://10.0.2.2:5000/reference/" + vm.userPlants[plant].img,

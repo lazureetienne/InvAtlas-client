@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 object InvAtlasDestinations {
     const val MAP_ROUTE = "map"
     const val SIGN_UP_ROUTE = "signup"
-    const val CHAT_ROUTE = "chat"
+    const val CHAT_ROUTE = "chat/{plantCode}/{plantName}"
     const val FLORADEX_ROUTE = "floradex"
 }
 

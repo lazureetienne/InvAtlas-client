@@ -31,10 +31,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.invatlas.Level
 import com.example.invatlas.R
 import com.example.invatlas.navigation.InvAtlasDestinations
@@ -85,7 +87,6 @@ fun InvAtlasApp() {
 
     val items = listOf(
         Screen.map,
-        Screen.chat,
         Screen.pokedex,
     )
 
@@ -168,9 +169,15 @@ fun InvAtlasApp() {
                 Modifier.padding(innerPadding)
             ) {
                 composable(InvAtlasDestinations.SIGN_UP_ROUTE) { SignUpScreen(vm, navController) }
-                composable(InvAtlasDestinations.MAP_ROUTE) { AtlasScreen(vm) }
-                composable(InvAtlasDestinations.CHAT_ROUTE) { IvyScreen() }
-                composable(InvAtlasDestinations.FLORADEX_ROUTE) { FloradexScreen(vm) }
+                composable(InvAtlasDestinations.MAP_ROUTE) { AtlasScreen(vm, navController) }
+                composable(
+                    InvAtlasDestinations.CHAT_ROUTE,
+                    arguments = listOf(navArgument("plantCode") { type = NavType.StringType })
+                ) { navBackStackEntry -> IvyScreen(vm,
+                    navBackStackEntry.arguments?.getString("plantCode")!!,
+                    navBackStackEntry.arguments?.getString("plantName")!!
+                ) }
+                composable(InvAtlasDestinations.FLORADEX_ROUTE) { FloradexScreen(vm, navController) }
             }
 
         }

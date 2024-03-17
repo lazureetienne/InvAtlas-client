@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,26 +34,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.invatlas.Message
 import com.example.invatlas.models.User
+import com.example.invatlas.models.UserPlant
+import com.example.invatlas.viewmodels.PlantViewModel
 
 @Composable
-fun IvyScreen() {
+fun IvyScreen(vm: PlantViewModel, plantCode: String, plantName: String) {
     var text by remember { mutableStateOf("") }
     var messages by remember { mutableStateOf(listOf<Message>()) }
 
     val onTextSubmit: (String) -> Unit = { submittedText ->
-        // TODO: Send to server
-        messages =
-            messages + Message(submittedText, "testUser") // TODO: fetch user from auth service
-        // TODO: Get response from server (async)
-//        listenToServer(user) { response ->
-//            messages = messages + Message(response, "Ivy")
-//        }
-        text = "" // Clear the text
+        messages = messages + Message(submittedText, vm.sessionUser?.name!!, true)
+        vm.ask(plantCode, submittedText)
+        messages = messages + Message(vm.askResponse ?: "Je n'ai pas compris, pouvez-vous répéter", plantName, false)
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 40.dp, bottom = 90.dp)
+            .padding(top = 20.dp, bottom = 8.dp)
     ) {
         BoxWithConstraints(modifier = Modifier.align(Alignment.TopCenter)) {
             Box(
@@ -84,11 +83,9 @@ fun IvyScreen() {
                         color = MaterialTheme.colorScheme.onTertiary
                     )
                 }
-
             }
-
         }
-        LazyColumn(modifier = Modifier.padding(top = 160.dp, bottom = 65.dp)) {
+        LazyColumn(modifier = Modifier.padding(top = 160.dp, bottom = 40.dp)) {
             items(messages.size) {
                 ChatBubble(messages[it])
             }
@@ -123,6 +120,7 @@ fun IvyScreen() {
             }
         }
     }
+
 }
 
 // inspired by https://medium.com/@meytataliti/building-a-simple-chat-app-with-jetpack-compose-883a240592d4
