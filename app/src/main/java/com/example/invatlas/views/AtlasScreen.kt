@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.invatlas.PlantWindow
 import com.example.invatlas.R
+import com.example.invatlas.models.Parc
+import com.example.invatlas.models.Parcs
 import com.example.invatlas.navigation.InvAtlasDestinations
 import com.example.invatlas.utils.checkForPermission
 import com.example.invatlas.utils.getCurrentLocation
@@ -41,6 +44,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerInfoWindow
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
@@ -55,8 +59,11 @@ fun AtlasScreen(vm: PlantViewModel, nav: NavHostController) {
     var showPopup by remember { mutableStateOf(false) }
     var showMap by remember { mutableStateOf(false) }
 
+
+
     LaunchedEffect(Unit, block = {
         vm.getUserPlants()
+        vm.getAllMarkers()
     })
 
     val cameraLauncher = rememberLauncherForActivityResult(
@@ -133,7 +140,7 @@ fun AtlasScreen(vm: PlantViewModel, nav: NavHostController) {
         ) {
             vm.userPlants.forEach { userPlant ->
                 MarkerInfoWindow(
-                    state = MarkerState(position = LatLng(userPlant.latitude, userPlant.longitude)),
+                    state = MarkerState(position = LatLng(userPlant.longitude, userPlant.latitude)),
                     title = "Shawi",
                 ) { marker ->
                     Box(
@@ -143,6 +150,11 @@ fun AtlasScreen(vm: PlantViewModel, nav: NavHostController) {
                         PlantWindow(userPlant)
                     }
                 }
+            }
+            vm.markers?.forEach { parc ->
+                Marker(
+                    state = MarkerState(position = LatLng(parc.long, parc.lat)),
+                )
             }
         }
 

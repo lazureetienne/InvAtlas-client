@@ -2,6 +2,8 @@ package com.example.invatlas
 
 import com.example.invatlas.models.AskRequestBody
 import com.example.invatlas.models.IdentifyRequestBody
+import com.example.invatlas.models.Parc
+import com.example.invatlas.models.Parcs
 import com.example.invatlas.models.Plant
 import com.example.invatlas.models.User
 import com.example.invatlas.models.UserPlant
@@ -27,6 +29,9 @@ interface PlantAPI {
 
     @GET("randomplant")
     fun randomPlant(): Call<Plant>
+
+    @GET("getallmarkers")
+    fun markers(): Call<List<Parc>>
 
     @Headers("Content-Type: application/json")
     @POST("identify")

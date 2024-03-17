@@ -1,24 +1,23 @@
 package com.example.invatlas.viewmodels
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.invatlas.PlantAPI
 import com.example.invatlas.RetrofitClient
 import com.example.invatlas.models.AskRequestBody
 import com.example.invatlas.models.IdentifyRequestBody
+import com.example.invatlas.models.Parc
+import com.example.invatlas.models.Parcs
 import com.example.invatlas.models.Plant
 import com.example.invatlas.models.User
 import com.example.invatlas.models.UserPlant
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.File
 
 
 class PlantViewModel : ViewModel() {
@@ -28,6 +27,7 @@ class PlantViewModel : ViewModel() {
     private var _user: User? = null
     private var _randomPlant: Plant? = null
     private var _askResponse: String? = null
+    private var _markers = mutableStateListOf<Parc>()
 
     var errorMessage: String by mutableStateOf("")
     val plantList: List<Plant>
@@ -42,6 +42,10 @@ class PlantViewModel : ViewModel() {
         get() = _randomPlant
     var askResponse: String? = null
         get() = _askResponse
+
+    var markers: List<Parc>? = null
+        get() = _markers
+
 
     fun getAllPlants() {
         viewModelScope.launch {
@@ -114,6 +118,20 @@ class PlantViewModel : ViewModel() {
                 val userApi = retrofit.create(PlantAPI::class.java)
                 val plantResponse = userApi.randomPlant().execute()
                 _randomPlant = plantResponse.body()
+
+            } catch (e: Exception) {
+                errorMessage = e.message.toString()
+            }
+        }
+    }
+
+    fun getAllMarkers() {
+        viewModelScope.launch {
+            try {
+                val retrofit = RetrofitClient.getClient()
+                val userApi = retrofit.create(PlantAPI::class.java)
+                val plantResponse = userApi.markers().execute()
+                _markers.addAll(plantResponse.body().orEmpty())
 
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
