@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,10 +21,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,16 +39,23 @@ import com.example.invatlas.Message
 import com.example.invatlas.models.User
 import com.example.invatlas.models.UserPlant
 import com.example.invatlas.viewmodels.PlantViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun IvyScreen(vm: PlantViewModel, plantCode: String, plantName: String) {
     var text by remember { mutableStateOf("") }
     var messages by remember { mutableStateOf(listOf<Message>()) }
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
     val onTextSubmit: (String) -> Unit = { submittedText ->
         messages = messages + Message(submittedText, vm.sessionUser?.name!!, true)
         vm.ask(plantCode, submittedText)
+        text = ""
         messages = messages + Message(vm.askResponse ?: "Je n'ai pas compris, pouvez-vous répéter", plantName, false)
+        coroutineScope.launch {
+            listState.animateScrollToItem(messages.size - 1)
+        }
     }
 
     Box(
@@ -85,7 +95,10 @@ fun IvyScreen(vm: PlantViewModel, plantCode: String, plantName: String) {
                 }
             }
         }
-        LazyColumn(modifier = Modifier.padding(top = 160.dp, bottom = 60.dp)) {
+        LazyColumn(
+            modifier = Modifier.padding(top = 160.dp, bottom = 100.dp),
+            state = listState
+        ) {
             items(messages.size) {
                 ChatBubble(messages[it])
             }

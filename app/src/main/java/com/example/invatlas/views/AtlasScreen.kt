@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -122,14 +123,13 @@ fun AtlasScreen(vm: PlantViewModel, nav: NavHostController) {
                 CameraPosition.Builder().target(defaultLocation).zoom(8f).build()
             }
         }
-
         GoogleMap(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(5.dp)
                 .clip(RoundedCornerShape(10.dp)),
             properties = properties,
-            cameraPositionState = cameraPositionState
+            cameraPositionState = cameraPositionState,
         ) {
             vm.userPlants.forEach { userPlant ->
                 MarkerInfoWindow(
