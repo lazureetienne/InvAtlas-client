@@ -85,7 +85,7 @@ fun IvyScreen(vm: PlantViewModel, plantCode: String, plantName: String) {
                 }
             }
         }
-        LazyColumn(modifier = Modifier.padding(top = 160.dp, bottom = 40.dp)) {
+        LazyColumn(modifier = Modifier.padding(top = 160.dp, bottom = 60.dp)) {
             items(messages.size) {
                 ChatBubble(messages[it])
             }

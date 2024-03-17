@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.invatlas.RetrofitClient
 import com.example.invatlas.viewmodels.PlantViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -77,7 +78,7 @@ fun FloradexScreen(vm: PlantViewModel, nav: NavController) {
                         }
                     ) {
                         AsyncImage(
-                            model = "http://10.0.2.2:5000/reference/" + vm.userPlants[plant].img,
+                            model = "${RetrofitClient.BASE_URL}reference/" + vm.userPlants[plant].img,
                             contentDescription = "Hello guys",
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -119,7 +120,7 @@ fun FloradexScreen(vm: PlantViewModel, nav: NavController) {
                         .padding(5.dp)
                 ) {
                     AsyncImage(
-                        model = "http://10.0.2.2:5000/reference/" + vm.plantList[plant].imgPath,
+                        model = "${RetrofitClient.BASE_URL}reference/" + vm.plantList[plant].imgPath,
                         contentDescription = "Hello guys",
                         modifier = Modifier
                             .fillMaxWidth()

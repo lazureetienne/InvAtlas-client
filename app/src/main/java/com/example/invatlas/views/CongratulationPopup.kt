@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
+import com.example.invatlas.RetrofitClient
 import com.example.invatlas.models.UserPlant
 
 
@@ -68,7 +69,7 @@ fun CongratulationPopup(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 AsyncImage(
-                    model = "http://10.0.2.2:5000/reference/" + userPlant.img,
+                    model = "${RetrofitClient.BASE_URL}reference/" + userPlant.img,
                     contentDescription = "Hello guys",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier

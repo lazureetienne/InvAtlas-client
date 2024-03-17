@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.Navigation.findNavController
 import coil.compose.AsyncImage
+import com.example.invatlas.RetrofitClient
 import com.example.invatlas.navigation.InvAtlasDestinations
 import com.example.invatlas.viewmodels.PlantViewModel
 import kotlinx.coroutines.time.delay
@@ -59,7 +60,7 @@ fun SignUpScreen(vm: PlantViewModel, nav: NavHostController) {
             verticalArrangement = Arrangement.Center,
         ) {
             AsyncImage(
-                model = "http://10.0.2.2:5000/reference/$path",
+                model = "${RetrofitClient.BASE_URL}/reference/$path",
                 contentDescription = "Hello guys",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
