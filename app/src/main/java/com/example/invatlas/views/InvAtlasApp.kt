@@ -132,7 +132,7 @@ fun InvAtlasApp() {
             bottomBar = {
                 if (bottomBarVisible) {
                     BottomNavigation(
-                        backgroundColor = MaterialTheme.colorScheme.primary
+                        backgroundColor = MaterialTheme.colorScheme.primaryContainer
                     ) {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentDestination = navBackStackEntry?.destination
